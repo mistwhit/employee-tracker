@@ -1,7 +1,7 @@
 INSERT INTO department (name)
 VALUES ("Writing"),
     ("Acting"),
-    ("Executive"),
+    ("Executive");
 
 INSERT INTO roles (title, salary, department_id)
 VALUES ("Head Writer", 150000, 1),
