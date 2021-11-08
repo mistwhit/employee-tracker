@@ -1,8 +1,7 @@
 # Employee Tracker
 
 ## Description
-- My motivation for this project was to create an employee management system that allows a user to manage the departments, roles, and employees in a company.
-- This was accomplished through creating a command-line application that creates, reads, updates, and deletes data within a company's database. 
+- This project is a command-line employee management system that allows a user to manage the departments, roles, and employees in a company.
 
 ## User Story
 ```md
