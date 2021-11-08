@@ -23,7 +23,7 @@ const welcome = () => {
             message: 'Welcome to the NBC Employee Management System! Please press ENTER to begin.'
         },
     ])
-    .then(mainMenu);
+    .then(main);
 }
 
 // Main Menu
@@ -69,7 +69,7 @@ const main = () => {
                 addDepartment();
                 break;
             case 'Quit':
-                quit();
+                db.end();
                 break;
             default:
                 break;
@@ -77,4 +77,184 @@ const main = () => {
     });
 }
 
-// Functions
+// View All Employees
+const viewEmployees = () => {
+    db.query(`SELECT * FROM employees;`, (err, res) => {
+        if (err) throw err
+        console.table(res)
+        main()
+    })
+};
+
+// Add Employee
+const addEmployee = () => {
+    db.query(`SELECT id, title FROM roles`, (err, data) => {
+        // Creates array of roles
+        const roleOptions = data.map(roles => ({
+            value: roles.id,
+            name: roles.title
+        }))
+    db.query(`SELECT id, first_name, last_name FROM employees`, (err, data) => {
+        // Creates array of employees as manager options
+        const mgrOptions = data.map(employees => ({
+            value: employees.id,
+            name: employees.first_name + " " + employees.last_name
+        }))
+        // Adds the option to select "No Manager" if employee does not have a manager
+        mgrOptions.push({
+            name: "No Manager",
+            value: null
+        })
+    inquirer.prompt([
+        {
+            type:'input',
+            name: 'firstName',
+            message: 'Employee First Name:'
+        },
+        {
+            type:'input',
+            name: 'lastName',
+            message: 'Employee Last Name:'
+        },
+        {
+            type:'list',
+            name: 'role',
+            message: 'Employee Role:',
+            choices: roleOptions
+        },
+        {
+            type:'list',
+            name: 'manager',
+            message: 'Employee Manager:',
+            choices: mgrOptions
+        }
+    ])
+    .then((answer) => {
+        console.log(answer);
+        db.query(`INSERT INTO employees (first_name, last_name, roles_id, manager_id) VALUES ('${answer.firstName}', '${answer.lastName}', ${answer.role}, ${answer.manager});`, (err, res) => {
+            if (err) throw err
+            console.log('Employee Added Successfully!')
+            main()
+        })
+    })
+    })
+    })
+};
+
+// Update Employee Role
+const updateRole = () => {
+    db.query(`SELECT id, title FROM roles;`, (err, data) => {
+        if (err) throw err
+        // Creates array of roles
+        const roleList = data.map(roles => ({
+            value: roles.id,
+            name: roles.title
+        }))
+    db.query(`SELECT id, first_name, last_name FROM employees;`, (err, data) => {
+        // Creates array of employee first & last names
+        const employeeList = data.map(employees => ({
+            value: employees.id,
+            name: employees.first_name + " " + employees.last_name,
+        }))
+    inquirer.prompt([
+        {
+            type:'list',
+            name:'employees',
+            message:'Choose Employee:',
+            choices: employeeList
+        },
+        {
+            type:'list',
+            name:'roles',
+            message:'Choose New Role:',
+            choices: roleList
+        }
+    ])
+    .then((answer) => {
+        db.query(`UPDATE employees SET roles_id = ${answer.roles} WHERE id = ${answer.employees};`, (err, res) => {
+            if (err) throw err
+            console.log('Employee Updated Successfully!')
+            main()
+        })
+    })
+    })
+    }) 
+};
+
+// View All Roles
+const viewRoles = () => {
+    db.query(`SELECT * FROM roles;`, (err, res) => {
+        if (err) throw err
+        console.table(res)
+        main()
+    })
+};
+
+// Add Role
+const addRole = () => {
+    db.query(`SELECT * FROM departments;`, (err, data) => {
+        if (err) throw err
+        // Creates array of departments
+        const departmentList= data.map(departments => ({
+            value: departments.id,
+            name: departments.name,
+        }))
+        inquirer.prompt([
+            {
+                type:'input',
+                name:'roleTitle',
+                message:'Role Title:'
+            },
+            {
+                type:'list',
+                name:'roleDepartment',
+                message:'Role Department:',
+                choices: departmentList
+            },
+            {
+                type:'number',
+                name:'roleSalary',
+                message:'Role Salary:'
+            }
+        ])
+        .then((answer) => {
+            db.query(`INSERT INTO roles (title, departments_id, salary) 
+            VALUES ('${answer.roleTitle}, ${answer.roleDepartment}, ${answer.roleSalary}');`, (err, res) => {
+                if (err) throw err
+                console.log('Role added successfully!')
+                main()
+            })
+        })
+    })
+};
+
+// View All Departments
+const viewDepartments = () => {
+    db.query(`SELECT * FROM departments;`, (err, res) => {
+        if (err) throw err
+        console.table(res)
+        main()
+    })
+};
+
+// Add Department
+const addDepartment = () => {
+    inquirer.prompt({
+        type:'input',
+        name:'department',
+        message:'Department name:'
+    })
+    .then((answer) => {
+        db.query(`INSERT INTO departments (name) VALUES ('${answer.department}');`, (err, res) => {
+            if (err) throw err
+            console.table('Department added successfully!')
+            main()
+        })
+    })
+};
+
+// Start
+db.connect((err) => {
+    if (err) throw err
+    welcome()
+});

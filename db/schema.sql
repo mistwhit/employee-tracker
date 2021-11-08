@@ -3,7 +3,7 @@ CREATE DATABASE thirtyrock_db;
 
 USE thirtyrock_db;
 
-CREATE TABLE department (
+CREATE TABLE departments (
     id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
     name VARCHAR(30) NOT NULL
 );
@@ -11,9 +11,9 @@ CREATE TABLE department (
 CREATE TABLE roles (
     id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
     title VARCHAR(30) NOT NULL,
-    salary DECIMAL(8,2) NOT NULL,
-    department_id INT,
-    FOREIGN KEY (department_id) REFERENCES department(id) 
+    departments_id INT,
+    salary INT,
+    FOREIGN KEY (departments_id) REFERENCES departments(id) 
     ON DELETE SET NULL
 );
 
@@ -25,5 +25,4 @@ CREATE TABLE employees (
     FOREIGN KEY (roles_id) REFERENCES roles(id),
     manager_id INT,
     FOREIGN KEY (manager_id) REFERENCES employees(id)
-    ON DELETE SET NULL
 );
