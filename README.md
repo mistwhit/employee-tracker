@@ -1,4 +1,3 @@
-![License: MIT](https://img.shields.io/github/license/mistwhit/employee-tracker)
 # Employee Tracker
 
 ## Description
