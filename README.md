@@ -23,6 +23,7 @@ npm install console.table
 ```
 ```
 mysql -u root -p
+(Enter your password here!)
 source db/schema.sql;
 source db/seeds.sql;
 exit
