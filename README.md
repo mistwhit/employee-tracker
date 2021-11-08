@@ -1,13 +1,34 @@
-# Employee Tracker
+# MySQL Employee Tracker
 
 ## Description
-- This project is a command-line employee management system that allows a user to manage the departments, roles, and employees in a company.
+This project is a command-line employee management system that allows a user to manage the departments, roles, and employees in their company.
 
-## User Story
-```md
-AS A business owner
-I WANT to be able to view and manage the departments, roles, and employees in my company
-SO THAT I can organize and plan my business
+## Demonstration
+(Video Link)
+
+## Installation
+Start by forking this repository in your own code editor, then follow the prompts below to dowload your package.json, dowload inquirer, dowload console.table, source your database, and then start the program in the command line.
+
+```
+npm init -y
+```
+```
+npm install
+```
+```
+npm install inquirer
+```
+```
+npm install console.table
+```
+```
+mysql -u root -p
+source db/schema.sql;
+source db/seeds.sql;
+exit
+```
+```
+npm start
 ```
 
 ## Technologies Used
@@ -15,5 +36,5 @@ SO THAT I can organize and plan my business
 - Inquirer
 - Console.Table
 
-## Demonstration
-(Video Link)
+## License
+This project is licensed under the MIT license.
