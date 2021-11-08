@@ -7,7 +7,7 @@ This project is a command-line employee management system that allows a user to 
 (Video Link)
 
 ## Installation
-Start by forking this repository in your own code editor, then follow the prompts below to dowload your package.json, dowload inquirer, dowload console.table, source your database, and then start the program in the command line.
+Start by cloning this repository in your own code editor, then follow the prompts below to dowload your package.json, dowload inquirer, dowload console.table, source your database, and start the program in the command line.
 
 ```
 npm init -y
