@@ -34,39 +34,39 @@ const main = () => {
             name:'main',
             message:'What would you like to do?',
             choices: [
+                "View All Departments",
+                "View All Roles",
                 "View All Employees",
+                "Add Department",
+                "Add Role",
                 "Add Employee",
                 "Update Employee Role",
-                "View All Roles",
-                "Add Role",
-                "View All Departments",
-                "Add Department",
                 "Quit"
             ]
         }
     ])
     .then((answer) => {
         switch (answer.main) {
+            case 'View All Departments':
+                viewDepartments();
+                break;
+            case 'View All Roles':
+                    viewRoles();
+                    break;
             case 'View All Employees':
                 viewEmployees();
                 break;
+            case 'Add Department':
+                    addDepartment();
+                    break;
+            case 'Add Role':
+                    addRole();
+                    break;
             case 'Add Employee':
                 addEmployee();
                 break;
             case 'Update Employee Role':
                 updateRole();
-                break;
-            case 'View All Roles':
-                viewRoles();
-                break;
-            case 'Add Role':
-                addRole();
-                break;
-            case 'View All Departments':
-                viewDepartments();
-                break;
-            case 'Add Department':
-                addDepartment();
                 break;
             case 'Quit':
                 db.end();
@@ -77,12 +77,84 @@ const main = () => {
     });
 }
 
+// View All Departments
+const viewDepartments = () => {
+    db.query(`SELECT * FROM departments;`, (err, res) => {
+        if (err) throw err
+        console.table(res)
+        main()
+    })
+};
+
+// View All Roles
+const viewRoles = () => {
+    db.query(`SELECT * FROM roles;`, (err, res) => {
+        if (err) throw err
+        console.table(res)
+        main()
+    })
+};
+
 // View All Employees
 const viewEmployees = () => {
     db.query(`SELECT * FROM employees;`, (err, res) => {
         if (err) throw err
         console.table(res)
         main()
+    })
+};
+
+// Add Department
+const addDepartment = () => {
+    inquirer.prompt({
+        type:'input',
+        name:'department',
+        message:'Department name:'
+    })
+    .then((answer) => {
+        db.query(`INSERT INTO departments (name) VALUES ('${answer.department}');`, (err, res) => {
+            if (err) throw err
+            console.table('Department added successfully!')
+            main()
+        })
+    })
+};
+
+// Add Role
+const addRole = () => {
+    db.query(`SELECT * FROM departments;`, (err, data) => {
+        if (err) throw err
+        // Creates array of departments
+        const departmentList= data.map(departments => ({
+            value: departments.id,
+            name: departments.name,
+        }))
+        inquirer.prompt([
+            {
+                type:'input',
+                name:'roleTitle',
+                message:'Role Title:'
+            },
+            {
+                type:'number',
+                name:'roleSalary',
+                message:'Role Salary:'
+            },
+            {
+                type:'list',
+                name:'roleDepartment',
+                message:'Role Department:',
+                choices: departmentList
+            }
+        ])
+        .then((answer) => {
+            db.query(`INSERT INTO roles (title, salary, departments_id)
+            VALUES ('${answer.roleTitle}', '${answer.roleSalary}', '${answer.roleDepartment}');`, (err, res) => {
+                if (err) throw err
+                console.table('Role added successfully!')
+                main()
+            })
+        })
     })
 };
 
@@ -179,78 +251,6 @@ const updateRole = () => {
     })
     })
     }) 
-};
-
-// View All Roles
-const viewRoles = () => {
-    db.query(`SELECT * FROM roles;`, (err, res) => {
-        if (err) throw err
-        console.table(res)
-        main()
-    })
-};
-
-// Add Role
-const addRole = () => {
-    db.query(`SELECT * FROM departments;`, (err, data) => {
-        if (err) throw err
-        // Creates array of departments
-        const departmentList= data.map(departments => ({
-            value: departments.id,
-            name: departments.name,
-        }))
-        inquirer.prompt([
-            {
-                type:'input',
-                name:'roleTitle',
-                message:'Role Title:'
-            },
-            {
-                type:'list',
-                name:'roleDepartment',
-                message:'Role Department:',
-                choices: departmentList
-            },
-            {
-                type:'number',
-                name:'roleSalary',
-                message:'Role Salary:'
-            }
-        ])
-        .then((answer) => {
-            db.query(`INSERT INTO roles (title, departments_id, salary) 
-            VALUES ('${answer.roleTitle}, ${answer.roleDepartment}, ${answer.roleSalary}');`, (err, res) => {
-                if (err) throw err
-                console.log('Role added successfully!')
-                main()
-            })
-        })
-    })
-};
-
-// View All Departments
-const viewDepartments = () => {
-    db.query(`SELECT * FROM departments;`, (err, res) => {
-        if (err) throw err
-        console.table(res)
-        main()
-    })
-};
-
-// Add Department
-const addDepartment = () => {
-    inquirer.prompt({
-        type:'input',
-        name:'department',
-        message:'Department name:'
-    })
-    .then((answer) => {
-        db.query(`INSERT INTO departments (name) VALUES ('${answer.department}');`, (err, res) => {
-            if (err) throw err
-            console.table('Department added successfully!')
-            main()
-        })
-    })
 };
 
 // Start
