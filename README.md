@@ -4,10 +4,10 @@
 This project is a command-line employee management system that allows a user to manage the departments, roles, and employees in their company.
 
 ## Demonstration
-(Video Link)
+[Video Demonstration](https://vimeo.com/660792071)
 
 ## Installation
-Start by cloning this repository in your own code editor, then follow the prompts below to dowload your package.json, dowload inquirer, dowload console.table, source your database, and start the program in the command line.
+Start by cloning this repository in your own code editor, then input the following pormpts to dowload your package.json, dowload inquirer, dowload console.table, source your database, and start the program in the command line.
 
 ```
 npm init -y
